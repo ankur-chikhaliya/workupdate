@@ -1,38 +1,48 @@
 ---
 name: workupdate-weekly
 description: >
-  Writes a weekly work update in the 3P format (Progress, Plans, Problems) from
-  the last 7 days of git history and the current session. Use when the user
-  says "weekly update", "weekly report", "3P update", "workupdate weekly",
-  "what did I ship this week", or asks for a week-in-review for their manager.
+  Writes a weekly work update as 5-7 plain bullets of finished work, after
+  reviewing the last 7 days of commits for bugs and issues. Use when the user
+  says "weekly update", "weekly report", "workupdate weekly", "what did I ship
+  this week", or asks for a week-in-review for their manager.
 ---
 
 # workupdate-weekly
 
-Paste-ready 3P update, readable in 30-60 seconds. Format adapted from
-marketplace skill `internal-comms` (`examples/3p-updates.md`, agentic-awesome-skills).
+Output: 5-7 bullets, past tense, outcome-first. No headers, no sections. Same style as `workupdate`, wider window, coarser grain.
 
 ## Steps
 
-1. Ask team/project name only if not given and not inferable from repo name.
-2. Collect evidence (skip git silently if not a repo):
-   - Progress: `git log --since="7 days ago" --author="$(git config user.name)" --pretty='%h %ad %s' --date=short` and `--shortstat` for size.
-   - Plans: `git status --short`, open branches, anything user or session said is next.
-   - Problems: blockers from session or commits (reverts, "wip", "fix" loops).
-3. Cluster by theme, not commit. Larger scope = less granular. Metrics only if from git or user.
+1. Gather commits (skip silently if not a git repo):
+   - `git log --since="7 days ago" --author="$(git config user.name)" --pretty='%h %ad %s' --date=short`
+   - `git log --since="7 days ago" --author="$(git config user.name)" --shortstat` for size.
+   - User range ("this sprint", "last 2 weeks") overrides. Also read `git status --short` and session work.
+2. Review before writing. Read `git show --stat` per commit and the diff of non-trivial ones. Look for: bugs, fixes of earlier work in the same week, reverts, missing error handling, env or config assumptions, untested paths, TODOs.
+3. Cluster commits by theme, not one bullet per commit. Write from what the code does, not commit titles.
 
-## Format
+## Bullet shape
+
+One sentence each, starts with a past-tense verb. Group by theme, in this order, skipping empty ones:
+
+1. **Delivered / Implemented** - features shipped, with scope in one clause.
+2. **Enhanced** - improvements to existing flows.
+3. **Fixed** - bugs, listed together in one bullet when small.
+4. **Completed / Verified** - testing, checks, docs, findings and recommended fixes.
+
+Style sample (shape only, not content):
 
 ```
-<emoji matching the work> <Team/Project> (<Mon DD – Mon DD>)
-Progress: <1-3 sentences: shipped, milestones, with numbers where known>
-Plans: <1-3 sentences: top priorities next week>
-Problems: <1-3 sentences: what slows the work; "None" if none>
+Delivered a comparison of the web and mobile feature sets and implemented parity across billing, contacts, reports and documents.
+Enhanced the order flow with automatic status updates, free-slot detection and live refresh of lists and counts.
+Fixed branch-switching data issues, stale calendar refresh, truncated text and incorrect relative timestamps.
+Completed responsive testing across key screens and verified the main flows end to end; documented gaps with recommended fixes.
 ```
 
 ## Rules
 
-- Each section max 3 sentences. Matter-of-fact, data-driven, not prose-heavy.
-- Audience has some but not much context: no jargon, no commit hashes.
-- Never invent work or metrics. Unknown = leave out.
-- Draft only. Do not send or post.
+- 5-7 bullets. Fewer only if there is truly less work; never pad.
+- Larger window = less granular: themes and outcomes, not file names.
+- Numbers only from git (commits, files changed) or the user. Never guess impact.
+- Real issues found in review go in a final bullet: "Identified <issue>; recommended <fix>". Only issues seen in the diff.
+- Never invent work. State if build/tests were not run.
+- Print only. Do not send or post.
