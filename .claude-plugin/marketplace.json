@@ -1,0 +1,14 @@
+{
+  "name": "workupdate",
+  "owner": {
+    "name": "Ankur Chikhaliya",
+    "email": "chikhaliyaankur3540@gmail.com"
+  },
+  "plugins": [
+    {
+      "name": "workupdate",
+      "source": "./",
+      "description": "Write a daily standup note or weekly 3P update from git history and the current session."
+    }
+  ]
+}

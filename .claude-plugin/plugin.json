@@ -1,0 +1,13 @@
+{
+  "name": "workupdate",
+  "description": "Write a daily standup note or weekly 3P update from git history and the current session. No external APIs.",
+  "version": "0.2.0",
+  "license": "MIT",
+  "keywords": ["standup", "work-update", "status", "weekly-report", "3p"],
+  "homepage": "https://github.com/ankur-chikhaliya/workupdate",
+  "repository": "https://github.com/ankur-chikhaliya/workupdate",
+  "author": {
+    "name": "Ankur Chikhaliya",
+    "email": "chikhaliyaankur3540@gmail.com"
+  }
+}
